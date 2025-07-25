@@ -1,0 +1,135 @@
+I. AUTHENTICATION API
+Base Path: /api
+File: auth.py
+Description: Handles user registration, login (token generation), and fetching user data.
+
+Endpoint: POST /api/register
+Description: Creates a new user account.
+Authentication: Not Required.
+Request Body (JSON):
+{
+"username": "newuser",
+"email": "user@example.com",
+"password": "a_strong_password"
+}
+Successful Response (201-Created): Returns the new user's information.
+Error Responses:
+- 400 Bad Request: If the email or username is already registered.
+
+Endpoint: POST /api/token
+Description: Authenticates a user and returns a JWT access token.
+Authentication: Not Required.
+Request Body (x-www-form-urlencoded):
+username=your_username&password=your_password
+Successful Response (200-OK): Returns the access token.
+Error Responses:
+- 401 Unauthorized: If the username or password is incorrect.
+
+Endpoint: GET /api/users/me
+Description: Fetches the details for the currently logged-in user.
+Authentication: REQUIRED (Bearer Token).
+Successful Response (200-OK): Returns the authenticated user's information.
+Error Responses:
+- 401 Unauthorized: If the token is missing, invalid, or expired.
+
+II. RECEIPTS API
+Base Path: /api/receipts
+File: receipts.py
+Description: Provides endpoints for uploading, viewing, updating, and managing receipts. All endpoints require authentication.
+
+Endpoint: POST /api/receipts/upload
+Description: Uploads a single receipt file. The file is saved and a background task is started for OCR processing.
+Authentication: REQUIRED (Bearer Token).
+Request Body: A multipart/form-data request containing the file.
+Error Responses:
+- 400 Bad Request: If the file type, size, or filename is invalid.
+
+Endpoint: GET /api/receipts/
+Description: Retrieves a list of all receipts for the logged-in user.
+Authentication: REQUIRED (Bearer Token).
+Query Parameters:
+- search (string, optional): Filters receipts by vendor name.
+- category (string, optional): Filters receipts by a specific category.
+- sort (string, optional): Sorts the results. Values: 'upload_date', 'amount', 'transaction_date'.
+
+Endpoint: PATCH /api/receipts/{receipt_id}
+Description: Updates the details of a specific receipt (e.g., its category or transaction date).
+Authentication: REQUIRED (Bearer Token).
+Request Body (JSON): Contains the fields to update.
+Error Responses:
+- 404 Not Found: If the receipt does not exist or does not belong to the user.
+
+Endpoint: DELETE /api/receipts/{receipt_id}
+Description: Deletes a specific receipt by its ID.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/receipts/file/{receipt_id}
+Description: Downloads the original file for a specific receipt.
+Authentication: REQUIRED (Bearer Token).
+Error Responses:
+- 404 Not Found: If the receipt or its file does not exist.
+
+III. USER & DASHBOARD API
+Base Path: /api
+File: user.py
+Description: Handles user-specific actions like setting goals and fetching dashboard data. All endpoints require authentication.
+
+Endpoint: POST /api/user/goal
+Description: Sets or updates the monthly spending goal for the logged-in user.
+Authentication: REQUIRED (Bearer Token).
+Request Body (JSON): Specifies the 'monthly_goal'.
+
+Endpoint: GET /api/user/goal
+Description: Retrieves the current monthly spending goal for the logged-in user.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/dashboard/summary
+Description: Fetches all the summary data needed to populate the main dashboard.
+Authentication: REQUIRED (Bearer Token).
+
+IV. ANALYTICS API
+Base Path: /api/analytics
+File: analytics.py
+Description: Provides endpoints for fetching aggregated spending data for the analytics dashboard. All endpoints require authentication.
+
+Endpoint: GET /api/analytics/summary
+Description: Fetches key performance indicators (KPIs) for the analytics dashboard.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/analytics/categories
+Description: Retrieves a list of all categories and the total amount spent in each.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/analytics/vendors
+Description: Retrieves a list of the top vendors by total spending.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/analytics/trends
+Description: Provides data for the monthly spending trend chart.
+Authentication: REQUIRED (Bearer Token).
+
+V. EXPORT API
+Base Path: /api/export
+File: export.py
+Description: Provides endpoints for creating, listing, and downloading receipt data exports. All endpoints require authentication.
+
+Endpoint: POST /api/export/
+Description: Creates a new export job and saves a record to the database.
+Authentication: REQUIRED (Bearer Token).
+Request Body (JSON): Specifies the 'format' (csv/json) and an optional list of 'receipt_ids'.
+
+Endpoint: GET /api/export/history
+Description: Retrieves a list of all previously generated export jobs for the user.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/export/summary
+Description: Gets summary statistics about the user's exports.
+Authentication: REQUIRED (Bearer Token).
+
+Endpoint: GET /api/export/file
+Description: Downloads a specific, previously generated export file.
+Authentication: REQUIRED (Bearer Token).
+Query Parameters:
+- file_path (string): The path of the file to download.
+Error Responses:
+- 404 Not Found: If the file does not exist or the user does not have permission.

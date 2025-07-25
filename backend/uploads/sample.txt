@@ -1,0 +1,16 @@
+Big Bazaar
+123 Market Rd., Mumbai, MH
+
+Receipt No: 4582
+Date: 21/07/2025    Time: 16:45
+
+Item        Qty   Price (INR)
+Milk        2        50.00
+Bread       1        25.00
+Eggs        1        60.00
+
+Subtotal              135.00
+Tax                    12.00
+GRAND TOTAL           147.00
+
+Paid via UPI
