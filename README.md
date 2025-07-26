@@ -58,7 +58,7 @@ The backend is a modern API built with **FastAPI**, chosen for its high performa
 
 ### Frontend Architecture
 
-The frontend is a responsive Single-Page Application (SPA) built with **React**, chosen for its component-based architecture and robust ecosystem.
+The frontend is a responsive Single-Page Application (SPA) built with **React**, chosen for its component-based architecture and robust ecosystem. I used Lovable.dev to design the UI/UX of the website: https://lovable.dev/projects/b63ba707-df2c-4143-a535-5c5e17b11399
 
 -   **Core Technologies**: React, React Router, Axios, Recharts, React Dropzone.
 -   **Structure**:
